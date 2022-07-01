@@ -1,7 +1,4 @@
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
-import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -11,9 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 public class AppiumDemo {
 
@@ -28,7 +23,7 @@ public class AppiumDemo {
         DesiredCapabilities caps = new DesiredCapabilities();
 
         caps.setCapability(AndroidMobileCapabilityType.PLATFORM_NAME, "android");
-        caps.setCapability(MobileCapabilityType.DEVICE_NAME, "pixel_4_28");
+        caps.setCapability(MobileCapabilityType.DEVICE_NAME, "My_New_Pixel_Device");
         caps.setCapability(CapabilityType.BROWSER_NAME, "chrome");
         //caps.setCapability("appPackage", "com.android.chrome");
         //caps.setCapability("appActivity", "com.google.android.apps.chrome.Main");
@@ -48,9 +43,10 @@ public class AppiumDemo {
         //BROWSER TESTING FOR WEB APPLICATION BUT ON MOBILE DEVICES
         WebDriver driver = new RemoteWebDriver(url, caps);
 
-        driver.get("https://www.carvana.com");
+//        driver.get("https://www.carvana.com");
+        driver.get("https://www.google.com");
 
-        //driver.findElement(By.name("q")).sendKeys("TechGlobal" + Keys.ENTER);
+        driver.findElement(By.name("q")).sendKeys("TechGlobal" + Keys.ENTER);
 
         Thread.sleep(10000);
 
