@@ -1,23 +1,30 @@
 package scripts;
 
-import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import pages.CarvanaHomePage;
+import utils.ConfigReader;
 import utils.Driver;
+import utils.Environment;
 
-import java.net.MalformedURLException;
+public class Base extends Environment {
 
-public class Base {
-
-    AndroidDriver androidDriver;
     WebDriver driver;
+    String applicationURL = ConfigReader.getProperty("applicationURL");
+
+    //Pages
     CarvanaHomePage carvanaHomePage;
 
-
     @BeforeMethod
-    public void setup() throws Exception {
+    public void setup(){
         driver = Driver.getDriver();
-        carvanaHomePage = new CarvanaHomePage(androidDriver);
+        driver.get(applicationURL);
+        carvanaHomePage = new CarvanaHomePage();
+    }
+
+    @AfterMethod
+    public void teardown(){
+        Driver.quitDriver();
     }
 }

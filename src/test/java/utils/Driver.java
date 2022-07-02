@@ -1,34 +1,79 @@
 package utils;
 
-import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
-public class Driver {
-
-    private Driver(){
-
-    }
+public class Driver extends Environment{
 
     private static WebDriver driver;
 
-    public static WebDriver getDriver() throws Exception {
+    private Driver(){}
 
-       DesiredCapabilities caps = new DesiredCapabilities();
-       URL url = new URL("http://127.0.0.1:4723/wd/hub/");
+    public static WebDriver getDriver(){
+        if(driver == null){
+            if(isMobile){
+                DesiredCapabilities caps = new DesiredCapabilities();
 
-       caps.setCapability(AndroidMobileCapabilityType.PLATFORM_NAME, "android");
-       caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel_4");
-       caps.setCapability(CapabilityType.BROWSER_NAME, "chrome");
-       driver = new RemoteWebDriver(url, caps);
+                caps.setCapability(MobileCapabilityType.PLATFORM_NAME, platformName);
+                caps.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
+                //caps.setCapability(MobileCapabilityType.UDID, "emulator-5554"); // this can be used instead of DEVICE_NAME
+                caps.setCapability(MobileCapabilityType.BROWSER_NAME, browser);
 
-    return driver;
+                URL url = null;
+                try {
+                    url = new URL("http://127.0.0.1:4723/wd/hub/");
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
 
+                driver = new RemoteWebDriver(url, caps);
+            }
+            else{
+                switch (browser){
+                    case "chrome":
+                        WebDriverManager.chromedriver().setup();
+                        driver = new ChromeDriver();
+                        break;
+                    case "firefox":
+                        WebDriverManager.firefoxdriver().setup();
+                        driver = new FirefoxDriver();
+                        break;
+                    case "safari":
+                        WebDriverManager.getInstance(SafariDriver.class).setup();
+                        driver = new SafariDriver();
+                        break;
+                    case "headless":
+                        driver = new HtmlUnitDriver();
+                        break;
+                    default:
+                        throw new NotFoundException("Browser IS NOT DEFINED properly!!!");
+                }
+                if(!browser.equals("headless")){
+                    driver.manage().window().maximize();
+                    driver.manage().timeouts().implicitlyWait(Long.parseLong(ConfigReader.getProperty("implicitWait")), TimeUnit.SECONDS);
+                }
+            }
+        }
+        return driver;
+    }
+
+    public static void quitDriver(){
+        if(driver != null){
+            driver.manage().deleteAllCookies();
+            driver.quit();
+            driver = null;
+        }
     }
 }
