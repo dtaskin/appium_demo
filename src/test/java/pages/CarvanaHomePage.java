@@ -15,6 +15,12 @@ public class CarvanaHomePage extends BasePage{
     @FindBy(css = "a[data-cv-test='headerTradesLink']")
     public WebElement sellTradeLink;
 
+    @FindBy(css = "a[data-cv-test='headerFinanceDropdown']")
+    public WebElement financeLink;
+
+    @FindBy(css = "a[data-cv-test='headerFinanceLoanCalc']")
+    public WebElement financeLoanCalculatorLink;
+
 
     //Mobile Locators
     @FindBy(css = "div[data-qa='styled-hamburger']>svg")
@@ -25,6 +31,12 @@ public class CarvanaHomePage extends BasePage{
 
     @FindBy(css = "a[data-cv-test='headerMobileTradesLink']")
     public WebElement sellTradeMobileLink;
+
+    @FindBy(css = "a[data-cv-test='headerMobileFinanceDropdown']")
+    public WebElement financeMobileLink;
+
+    @FindBy(css = "a[data-cv-test='headerMobileFinanceLoanCalc']")
+    public WebElement financeLoanCalculatorMobileLink;
 
 
 }

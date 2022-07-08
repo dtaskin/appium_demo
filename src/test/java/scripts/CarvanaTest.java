@@ -1,5 +1,7 @@
 package scripts;
 
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Waiter;
@@ -85,14 +87,52 @@ public class CarvanaTest extends Base {
             carvanaHomePage.sellTradeMobileLink.click();
         } else carvanaHomePage.sellTradeLink.click();
 
-        Assert.assertEquals(driver.getCurrentUrl(),"https://www.carvana.com/sell-my-car");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.carvana.com/sell-my-car");
         Assert.assertEquals(sellTradePage.getARealOfferIn2MinutesText.getText(), "GET A REAL OFFER IN 2 MINUTES");
         Assert.assertEquals(sellTradePage.wePickUpYourCarText.getText(), "We pick up your car. You get paid on the spot.");
         sellTradePage.vinButton.click();
         sellTradePage.vinInputBox.sendKeys("00000000000000000");
         sellTradePage.getMyOfferButton.click();
-        Waiter.waitForVisibilityOfElement(driver,sellTradePage.weCoulntFindThatVinText,10);
+        Waiter.waitForVisibilityOfElement(driver, sellTradePage.weCoulntFindThatVinText, 10);
         Assert.assertEquals(sellTradePage.weCoulntFindThatVinText.getText(), "We couldn’t find that VIN. Please check your entry and try again.");
+
+    }
+
+    /*
+    Scenario: Validate AUTO LOAN CALCULATOR under FINANCING menu item
+    Given user is on “https://www.carvana.com/”
+    When user hovers over on “FINANCING” menu item
+    And user clicks on “AUTO LOAN CALCULATOR” menu item
+    When user enters “Cost of Car I want” as “10,000”
+    And user selects “What’s Your credit Score?” as “Excellent: 780”
+    And user selects “Choose Your Loan Terms” as “60 Months”
+    And user enters “What is Your Down Payment?” as “1,500”
+    Then user should see the monthly payment as “154.00”
+     */
+
+    @Test(priority = 5, description = "Validate AUTO LOAN CALCULATOR under FINANCING menu item")
+    public void ValidateAutoLoanCalculator() {
+        if (isMobile) {
+            carvanaHomePage.hamburgerMenu.click();
+            Waiter.waitForVisibilityOfElement(driver, carvanaHomePage.financeMobileLink, 5);
+            carvanaHomePage.financeMobileLink.click();
+            Waiter.waitForVisibilityOfElement(driver, carvanaHomePage.financeLoanCalculatorMobileLink, 5);
+            carvanaHomePage.financeLoanCalculatorMobileLink.click();
+        } else {
+            carvanaHomePage.financeLink.click();
+            Actions actions = new Actions(driver);
+            actions.moveToElement(carvanaHomePage.financeLink).perform();
+            Waiter.waitForVisibilityOfElement(driver, carvanaHomePage.financeLoanCalculatorLink, 5);
+            carvanaHomePage.financeLoanCalculatorLink.click();
+        }
+
+        autoLoanCalculatorPage.costOfCarIWantInputBox.sendKeys("10,000");
+        autoLoanCalculatorPage.creditScoreDropDown.click();
+        autoLoanCalculatorPage.excellentCreditOption.click();
+        autoLoanCalculatorPage.loanTermDropDown.click();
+        autoLoanCalculatorPage.loanTermOption.click();
+        autoLoanCalculatorPage.downPaymentInputBox.sendKeys("1,500");
+        Assert.assertEquals(autoLoanCalculatorPage.loanCalculatorDisplayValue.getText(),"167.00");
 
     }
 

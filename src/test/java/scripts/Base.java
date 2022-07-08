@@ -3,10 +3,7 @@ package scripts;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import pages.CarFinderPage;
-import pages.CarvanaHomePage;
-import pages.SellTradePage;
-import pages.TryCarFinderPage;
+import pages.*;
 import utils.ConfigReader;
 import utils.Driver;
 import utils.Environment;
@@ -21,6 +18,8 @@ public class Base extends Environment {
     CarFinderPage carvanaCarFinderPage;
     TryCarFinderPage tryCarFinderPage;
     SellTradePage sellTradePage;
+    AutoLoanCalculatorPage autoLoanCalculatorPage;
+
 
     @BeforeMethod
     public void setup(){
@@ -30,6 +29,7 @@ public class Base extends Environment {
         carvanaCarFinderPage = new CarFinderPage();
         tryCarFinderPage = new TryCarFinderPage();
         sellTradePage = new SellTradePage();
+        autoLoanCalculatorPage = new AutoLoanCalculatorPage();
     }
 
     @AfterMethod
